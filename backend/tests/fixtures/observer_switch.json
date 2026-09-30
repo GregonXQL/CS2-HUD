@@ -1,0 +1,511 @@
+{
+  "auth": {
+    "token": "CHANGE_ME_TOKEN"
+  },
+  "provider": {
+    "name": "Counter-Strike 2",
+    "timestamp": 1790803379
+  },
+  "map": {
+    "name": "de_mirage",
+    "mode": "competitive",
+    "phase": "live",
+    "round": 10,
+    "team_ct": {
+      "name": "NORTH STAR",
+      "score": 6
+    },
+    "team_t": {
+      "name": "EMBER",
+      "score": 4
+    },
+    "round_wins": {
+      "1": "ct_win_elimination",
+      "2": "t_win_bomb",
+      "3": "ct_win_defuse"
+    }
+  },
+  "round": {
+    "phase": "live"
+  },
+  "phase_countdowns": {
+    "phase": "live",
+    "phase_ends_in": "46.0"
+  },
+  "allplayers": {
+    "76561198000000000": {
+      "name": "NOVA",
+      "observer_slot": 0,
+      "team": "CT",
+      "state": {
+        "health": 100,
+        "armor": 100,
+        "helmet": true,
+        "defusekit": true,
+        "money": 4850,
+        "equip_value": 5000,
+        "round_kills": 1,
+        "round_killhs": 1,
+        "flashed": 0
+      },
+      "match_stats": {
+        "kills": 15,
+        "assists": 3,
+        "deaths": 7,
+        "mvps": 2,
+        "score": 28
+      },
+      "weapons": {
+        "weapon_0": {
+          "name": "weapon_m4a1_silencer",
+          "type": "Rifle",
+          "state": "active",
+          "ammo_clip": 18,
+          "ammo_clip_max": 30,
+          "ammo_reserve": 90
+        },
+        "weapon_1": {
+          "name": "weapon_flashbang",
+          "type": "Grenade",
+          "state": "holstered"
+        },
+        "weapon_2": {
+          "name": "weapon_knife",
+          "type": "Knife",
+          "state": "holstered"
+        }
+      }
+    },
+    "76561198000000001": {
+      "name": "frost",
+      "observer_slot": 1,
+      "team": "CT",
+      "state": {
+        "health": 100,
+        "armor": 100,
+        "helmet": true,
+        "defusekit": true,
+        "money": 4700,
+        "equip_value": 5000,
+        "round_kills": 0,
+        "round_killhs": 0,
+        "flashed": 0
+      },
+      "match_stats": {
+        "kills": 13,
+        "assists": 3,
+        "deaths": 8,
+        "mvps": 2,
+        "score": 28
+      },
+      "weapons": {
+        "weapon_0": {
+          "name": "weapon_m4a1_silencer",
+          "type": "Rifle",
+          "state": "active",
+          "ammo_clip": 18,
+          "ammo_clip_max": 30,
+          "ammo_reserve": 90
+        },
+        "weapon_1": {
+          "name": "weapon_flashbang",
+          "type": "Grenade",
+          "state": "holstered"
+        },
+        "weapon_2": {
+          "name": "weapon_knife",
+          "type": "Knife",
+          "state": "holstered"
+        }
+      }
+    },
+    "76561198000000002": {
+      "name": "kairo",
+      "observer_slot": 2,
+      "team": "CT",
+      "state": {
+        "health": 100,
+        "armor": 100,
+        "helmet": true,
+        "defusekit": true,
+        "money": 4550,
+        "equip_value": 5000,
+        "round_kills": 0,
+        "round_killhs": 0,
+        "flashed": 0
+      },
+      "match_stats": {
+        "kills": 12,
+        "assists": 3,
+        "deaths": 9,
+        "mvps": 2,
+        "score": 28
+      },
+      "weapons": {
+        "weapon_0": {
+          "name": "weapon_m4a1_silencer",
+          "type": "Rifle",
+          "state": "active",
+          "ammo_clip": 18,
+          "ammo_clip_max": 30,
+          "ammo_reserve": 90
+        },
+        "weapon_1": {
+          "name": "weapon_flashbang",
+          "type": "Grenade",
+          "state": "holstered"
+        },
+        "weapon_2": {
+          "name": "weapon_knife",
+          "type": "Knife",
+          "state": "holstered"
+        }
+      }
+    },
+    "76561198000000003": {
+      "name": "echo",
+      "observer_slot": 3,
+      "team": "CT",
+      "state": {
+        "health": 100,
+        "armor": 100,
+        "helmet": true,
+        "defusekit": true,
+        "money": 4400,
+        "equip_value": 5000,
+        "round_kills": 0,
+        "round_killhs": 0,
+        "flashed": 0
+      },
+      "match_stats": {
+        "kills": 11,
+        "assists": 3,
+        "deaths": 10,
+        "mvps": 2,
+        "score": 28
+      },
+      "weapons": {
+        "weapon_0": {
+          "name": "weapon_m4a1_silencer",
+          "type": "Rifle",
+          "state": "active",
+          "ammo_clip": 18,
+          "ammo_clip_max": 30,
+          "ammo_reserve": 90
+        },
+        "weapon_1": {
+          "name": "weapon_flashbang",
+          "type": "Grenade",
+          "state": "holstered"
+        },
+        "weapon_2": {
+          "name": "weapon_knife",
+          "type": "Knife",
+          "state": "holstered"
+        }
+      }
+    },
+    "76561198000000004": {
+      "name": "Vex",
+      "observer_slot": 4,
+      "team": "CT",
+      "state": {
+        "health": 100,
+        "armor": 100,
+        "helmet": true,
+        "defusekit": true,
+        "money": 4250,
+        "equip_value": 5000,
+        "round_kills": 0,
+        "round_killhs": 0,
+        "flashed": 0
+      },
+      "match_stats": {
+        "kills": 10,
+        "assists": 3,
+        "deaths": 11,
+        "mvps": 2,
+        "score": 28
+      },
+      "weapons": {
+        "weapon_0": {
+          "name": "weapon_m4a1_silencer",
+          "type": "Rifle",
+          "state": "active",
+          "ammo_clip": 18,
+          "ammo_clip_max": 30,
+          "ammo_reserve": 90
+        },
+        "weapon_1": {
+          "name": "weapon_flashbang",
+          "type": "Grenade",
+          "state": "holstered"
+        },
+        "weapon_2": {
+          "name": "weapon_knife",
+          "type": "Knife",
+          "state": "holstered"
+        }
+      }
+    },
+    "76561198000000005": {
+      "name": "FL1NT",
+      "observer_slot": 5,
+      "team": "T",
+      "state": {
+        "health": 100,
+        "armor": 100,
+        "helmet": true,
+        "defusekit": false,
+        "money": 4100,
+        "equip_value": 5000,
+        "round_kills": 0,
+        "round_killhs": 0,
+        "flashed": 102
+      },
+      "match_stats": {
+        "kills": 9,
+        "assists": 3,
+        "deaths": 12,
+        "mvps": 2,
+        "score": 28
+      },
+      "weapons": {
+        "weapon_0": {
+          "name": "weapon_ak47",
+          "type": "Rifle",
+          "state": "active",
+          "ammo_clip": 18,
+          "ammo_clip_max": 30,
+          "ammo_reserve": 90
+        },
+        "weapon_1": {
+          "name": "weapon_flashbang",
+          "type": "Grenade",
+          "state": "holstered"
+        },
+        "weapon_2": {
+          "name": "weapon_knife",
+          "type": "Knife",
+          "state": "holstered"
+        }
+      }
+    },
+    "76561198000000006": {
+      "name": "orbit",
+      "observer_slot": 6,
+      "team": "T",
+      "state": {
+        "health": 100,
+        "armor": 100,
+        "helmet": true,
+        "defusekit": false,
+        "money": 3950,
+        "equip_value": 5000,
+        "round_kills": 0,
+        "round_killhs": 0,
+        "flashed": 0
+      },
+      "match_stats": {
+        "kills": 8,
+        "assists": 3,
+        "deaths": 13,
+        "mvps": 2,
+        "score": 28
+      },
+      "weapons": {
+        "weapon_0": {
+          "name": "weapon_ak47",
+          "type": "Rifle",
+          "state": "active",
+          "ammo_clip": 18,
+          "ammo_clip_max": 30,
+          "ammo_reserve": 90
+        },
+        "weapon_1": {
+          "name": "weapon_flashbang",
+          "type": "Grenade",
+          "state": "holstered"
+        },
+        "weapon_2": {
+          "name": "weapon_knife",
+          "type": "Knife",
+          "state": "holstered"
+        }
+      }
+    },
+    "76561198000000007": {
+      "name": "sable",
+      "observer_slot": 7,
+      "team": "T",
+      "state": {
+        "health": 100,
+        "armor": 100,
+        "helmet": true,
+        "defusekit": false,
+        "money": 3800,
+        "equip_value": 5000,
+        "round_kills": 0,
+        "round_killhs": 0,
+        "flashed": 0
+      },
+      "match_stats": {
+        "kills": 7,
+        "assists": 3,
+        "deaths": 14,
+        "mvps": 2,
+        "score": 28
+      },
+      "weapons": {
+        "weapon_0": {
+          "name": "weapon_ak47",
+          "type": "Rifle",
+          "state": "active",
+          "ammo_clip": 18,
+          "ammo_clip_max": 30,
+          "ammo_reserve": 90
+        },
+        "weapon_1": {
+          "name": "weapon_flashbang",
+          "type": "Grenade",
+          "state": "holstered"
+        },
+        "weapon_2": {
+          "name": "weapon_c4",
+          "type": "C4",
+          "state": "holstered"
+        }
+      }
+    },
+    "76561198000000008": {
+      "name": "zero",
+      "observer_slot": 8,
+      "team": "T",
+      "state": {
+        "health": 100,
+        "armor": 100,
+        "helmet": true,
+        "defusekit": false,
+        "money": 3650,
+        "equip_value": 5000,
+        "round_kills": 0,
+        "round_killhs": 0,
+        "flashed": 0
+      },
+      "match_stats": {
+        "kills": 6,
+        "assists": 3,
+        "deaths": 15,
+        "mvps": 2,
+        "score": 28
+      },
+      "weapons": {
+        "weapon_0": {
+          "name": "weapon_ak47",
+          "type": "Rifle",
+          "state": "active",
+          "ammo_clip": 18,
+          "ammo_clip_max": 30,
+          "ammo_reserve": 90
+        },
+        "weapon_1": {
+          "name": "weapon_flashbang",
+          "type": "Grenade",
+          "state": "holstered"
+        },
+        "weapon_2": {
+          "name": "weapon_knife",
+          "type": "Knife",
+          "state": "holstered"
+        }
+      }
+    },
+    "76561198000000009": {
+      "name": "rune",
+      "observer_slot": 9,
+      "team": "T",
+      "state": {
+        "health": 100,
+        "armor": 100,
+        "helmet": true,
+        "defusekit": false,
+        "money": 3500,
+        "equip_value": 5000,
+        "round_kills": 0,
+        "round_killhs": 0,
+        "flashed": 0
+      },
+      "match_stats": {
+        "kills": 5,
+        "assists": 3,
+        "deaths": 16,
+        "mvps": 2,
+        "score": 28
+      },
+      "weapons": {
+        "weapon_0": {
+          "name": "weapon_ak47",
+          "type": "Rifle",
+          "state": "active",
+          "ammo_clip": 18,
+          "ammo_clip_max": 30,
+          "ammo_reserve": 90
+        },
+        "weapon_1": {
+          "name": "weapon_flashbang",
+          "type": "Grenade",
+          "state": "holstered"
+        },
+        "weapon_2": {
+          "name": "weapon_knife",
+          "type": "Knife",
+          "state": "holstered"
+        }
+      }
+    }
+  },
+  "player": {
+    "steamid": "76561198000000005",
+    "name": "FL1NT",
+    "observer_slot": 5,
+    "team": "T",
+    "state": {
+      "health": 100,
+      "armor": 100,
+      "helmet": true,
+      "defusekit": false,
+      "money": 4100,
+      "equip_value": 5000,
+      "round_kills": 0,
+      "round_killhs": 0,
+      "flashed": 102
+    },
+    "match_stats": {
+      "kills": 9,
+      "assists": 3,
+      "deaths": 12,
+      "mvps": 2,
+      "score": 28
+    },
+    "weapons": {
+      "weapon_0": {
+        "name": "weapon_ak47",
+        "type": "Rifle",
+        "state": "active",
+        "ammo_clip": 18,
+        "ammo_clip_max": 30,
+        "ammo_reserve": 90
+      },
+      "weapon_1": {
+        "name": "weapon_flashbang",
+        "type": "Grenade",
+        "state": "holstered"
+      },
+      "weapon_2": {
+        "name": "weapon_knife",
+        "type": "Knife",
+        "state": "holstered"
+      }
+    }
+  }
+}

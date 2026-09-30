@@ -1,0 +1,14 @@
+appId: local.cs2.broadcast.overlay
+productName: CS2 Broadcast Overlay
+directories:
+  output: release
+files:
+  - dist/**/*
+  - assets/**/*
+  - package.json
+win:
+  target:
+    - target: portable
+      arch: [x64]
+  artifactName: CS2BroadcastOverlay.exe
+  signAndEditExecutable: false
