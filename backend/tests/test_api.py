@@ -33,14 +33,16 @@ def test_layout_and_persistence(client, config):
 
 def test_teams(client, config, sample):
     assert client.put('/api/teams', json={'left_slot': None}).status_code == 422
-    result = client.put('/api/teams', json={'a_name': '北极星', 'b_name': '余烬', 'left_slot': 'B'}).json()
+    result = client.put('/api/teams', json={'a_name': '北极星', 'b_name': '余烬'}).json()
     assert result['a_name'] == '北极星'
-    assert client.post('/api/teams/swap').json()['a_side'] == 'T'
+    assert client.post('/api/teams/swap').status_code == 410
+    for patch in ({'left_slot': 'B'}, {'a_side': 'T'}, {'auto_swap': False}):
+        assert client.put('/api/teams', json=patch).status_code == 422
     with TestClient(create_app(config)) as restarted:
-        assert restarted.get('/api/teams').json()['a_side'] == 'T'
+        assert restarted.get('/api/teams').json()['a_name'] == result['a_name']
     sample['auth']['token'] = 'test-token'
     client.post('/api/gsi', json=sample)
-    assert client.get('/api/state').json()['teams']['right']['name'] == '北极星'
+    assert client.get('/api/state').json()['teams']['left']['name'] == '北极星'
     assert client.get('/api/teams').json()['roster_counts']['A'] == 5
     assert client.post('/api/teams/reset-roster').json()['roster_counts']['A'] == 0
 

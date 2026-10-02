@@ -195,8 +195,7 @@ def create_app(settings: Settings | None = None):
 
     @app.post('/api/teams/swap')
     async def swap_teams():
-        async with mutation_lock:
-            return await save_teams(teams.settings.model_copy(update={'a_side': 'T' if teams.settings.a_side == 'CT' else 'CT'}))
+        raise HTTPException(410, '左右位置已固定为观察编号 1–5 / 6–0，不再支持手动换边')
 
     @app.post('/api/teams/reset-roster')
     async def reset_roster():

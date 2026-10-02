@@ -41,6 +41,11 @@ def vector(value):
     return dict(zip(('x', 'y', 'z'), values)) if all(v is not None for v in values) else None
 
 
+def observer_index(value):
+    value = number(value, None) if not isinstance(value, bool) else None
+    return int(value) if value is not None and value.is_integer() and 0 <= value <= 9 else None
+
+
 def parse_player(steamid, raw, teams, observed):
     raw = obj(raw)
     state, stats = obj(raw.get('state')), obj(raw.get('match_stats'))
@@ -56,7 +61,7 @@ def parse_player(steamid, raw, teams, observed):
                                   key: integer(w.get(key), None) for key in ('ammo_clip', 'ammo_clip_max', 'ammo_reserve')}))
     primary = next((w for w in weapons if w.type in ('Rifle', 'SniperRifle', 'SMG', 'Shotgun', 'Machine Gun', 'MachineGun')), None)
     health = max(0, min(100, integer(state.get('health'))))
-    return Player(position=vector(raw.get('position')), forward=vector(raw.get('forward')), steamid=str(steamid), name=string(raw.get('name')) or '—', observer_slot=integer(raw.get('observer_slot'), None),
+    return Player(position=vector(raw.get('position')), forward=vector(raw.get('forward')), steamid=str(steamid), name=string(raw.get('name')) or '—', observer_slot=observer_index(raw.get('observer_slot')),
                   side=side, team_slot=('A' if side == teams.a_side else 'B') if side else None,
                   health=health, armor=max(0, integer(state.get('armor'))),
                   helmet=boolean(state.get('helmet')), defusekit=boolean(state.get('defusekit')),
@@ -91,6 +96,16 @@ def normalize(raw: dict, settings: TeamSettings, now_ms: int, online=True) -> Ma
             consecutive_round_losses=integer(team.get('consecutive_round_losses'), None),
             series_wins=integer(team.get('matches_won_this_series'), None),
             alive_count=sum(p.is_alive and p.side == side for p in players))
+    # Fixed panel numbers: GSI slots 0..4 are displayed as 1..5 on the left.
+    # Include dead players so deaths cannot flip the scoreboard's team identity.
+    numbered_left = [p.side for p in players if p.observer_slot is not None and p.observer_slot < 5 and p.side]
+    if not numbered_left:
+        numbered_left = [('T' if p.side == 'CT' else 'CT') for p in players
+                         if p.observer_slot is not None and p.observer_slot >= 5 and p.side]
+    left_side = settings.a_side
+    if numbered_left.count('CT') != numbered_left.count('T'):
+        left_side = 'CT' if numbered_left.count('CT') > numbered_left.count('T') else 'T'
+    left_slot = 'A' if left_side == settings.a_side else 'B'
     history = []
     for index, value in obj(m.get('round_wins')).items():
         parts = value.split('_win_') if isinstance(value, str) else []
@@ -104,7 +119,7 @@ def normalize(raw: dict, settings: TeamSettings, now_ms: int, online=True) -> Ma
             current_round=max(1, integer(m.get('round')) + 1)),
         round=RoundInfo(phase=choice(r.get('phase'), ('freezetime', 'live', 'over'), 'unknown'),
             countdown_phase=string(c.get('phase')), phase_ends_in=number(c.get('phase_ends_in'), None), win_side=choice(r.get('win_team'), ('CT', 'T'))),
-        teams=TeamsView(left=views[settings.left_slot], right=views['B' if settings.left_slot == 'A' else 'A']),
+        teams=TeamsView(left=views[left_slot], right=views['B' if left_slot == 'A' else 'A']),
         players=players, observed_steamid=observed, observed_player=current,
         bomb=BombInfo(position=vector(b.get('position')), state=choice(b.get('state') or r.get('bomb'), ('carried', 'dropped', 'planting', 'planted', 'defusing', 'defused', 'exploded'), 'none'),
             countdown=number(b.get('countdown'), None), player_steamid=string(b.get('player'))),

@@ -35,3 +35,38 @@ def test_strings_and_weapons(sample):
     assert state.players[0].secondary.display_name == 'future'
     assert state.players[0].grenades == ['Flash']
     assert state.players[0].primary.display_name == 'M4A1-S'
+
+
+def test_scoreboard_follows_numbers_even_with_legacy_left_selection():
+    raw = payload()
+    settings = TeamSettings(a_name='Alpha', b_name='Bravo', left_slot='B')
+    state = normalize(raw, settings, 1)
+    assert state.teams.left.name == 'Alpha'
+    # CS2 may reassign observer numbers; names/scores must follow the numbered group.
+    for player in raw['allplayers'].values():
+        player['observer_slot'] = (player['observer_slot'] + 5) % 10
+        player['state']['health'] = 0
+    state = normalize(raw, settings, 2)
+    assert state.teams.left.name == 'Bravo'
+    assert state.teams.left.side == 'T'
+    assert state.teams.left.score == raw['map']['team_t']['score']
+    assert state.teams.right.name == 'Alpha'
+
+
+def test_halftime_without_renumbering_keeps_numbered_team_on_left():
+    from app.core.team_manager import TeamManager
+    manager = TeamManager(TeamSettings(a_name='Alpha', auto_swap=False))
+    manager.update(payload())
+    raw = payload('halftime_swap')
+    manager.update(raw)
+    state = normalize(raw, manager.settings, 1)
+    assert state.teams.left.name == 'Alpha'
+    assert state.teams.left.side == 'T'
+
+
+@pytest.mark.parametrize('slot', [None, -1, 10, 1.5, True, 'NaN'])
+def test_invalid_observer_numbers_are_not_assigned(slot):
+    raw = payload()
+    next(iter(raw['allplayers'].values()))['observer_slot'] = slot
+    state = normalize(raw, TeamSettings(), 1)
+    assert next(p for p in state.players if p.name == 'NOVA').observer_slot is None

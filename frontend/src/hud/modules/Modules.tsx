@@ -3,6 +3,7 @@ import type { MatchState, ModuleId, Player, Side } from '../../lib/types';
 import { useStore } from '../../lib/store';
 import { Radar } from './Radar';
 import { UtilityIcons } from './UtilityIcons';
+import { playersForPanel } from '../../lib/playerOrder';
 export const sideColor = (side: Side | null) => side === 'T' ? '#DE9B35' : '#5D79AE';
 const teamStyle = (side: Side | null) => ({ '--side': sideColor(side) }) as CSSProperties;
 function Equipment({ player: p }: { player: Player }) {
@@ -49,6 +50,5 @@ export function HudModule({ id, state }: { id: ModuleId; state: MatchState }) {
     if (!p) return null;
     return <div className="observed-panel" style={teamStyle(p.side)}><div className="observed-title"><b>{p.name}</b><UtilityIcons grenades={p.grenades} bomb={p.has_bomb}/><span>${p.money} · MVP {p.mvps}</span></div><div className="observed-detail"><strong>{p.health}<small>HP</small></strong><Equipment player={p}/><span>{p.kills} / {p.assists} / {p.deaths}</span><b>{p.active_weapon?.display_name ?? '—'}<small>{p.active_weapon?.ammo_clip ?? '—'} / {p.active_weapon?.ammo_reserve ?? '—'}</small></b></div></div>;
   }
-  const team = id === 'team_left' ? state.teams.left : state.teams.right;
-  return <div className="team-panel">{state.players.filter(p => p.team_slot === team.slot).slice(0, 5).map(p => <PlayerCard key={p.steamid} player={p} mirror={id === 'team_right'}/>)}</div>;
+  return <div className="team-panel">{playersForPanel(state.players, id === 'team_right').map(p => <PlayerCard key={p.steamid} player={p} mirror={id === 'team_right'}/>)}</div>;
 }
