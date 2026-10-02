@@ -4,6 +4,7 @@ import { useStore } from '../../lib/store';
 import { Radar } from './Radar';
 import { UtilityIcons } from './UtilityIcons';
 import { playersForPanel } from '../../lib/playerOrder';
+import { WeaponDisplay } from './WeaponDisplay';
 export const sideColor = (side: Side | null) => side === 'T' ? '#DE9B35' : '#5D79AE';
 const teamStyle = (side: Side | null) => ({ '--side': sideColor(side) }) as CSSProperties;
 function Equipment({ player: p }: { player: Player }) {
@@ -16,7 +17,7 @@ export function PlayerCard({ player: p, mirror }: { player: Player; mirror: bool
   return <div className={`player-card ${mirror ? 'mirror' : ''} ${p.is_alive ? '' : 'dead'} ${p.is_observed ? 'observed' : ''}`} style={teamStyle(p.side)}>
     <span className="slot-number">{p.observer_slot === null ? '—' : (p.observer_slot + 1) % 10}</span>
     <div className="player-main"><div className="player-line"><b className="player-name">{p.name}<i style={{ opacity: Math.min(1, Math.max(0, p.flashed / 255)) }}/></b><UtilityIcons grenades={p.grenades} bomb={p.has_bomb}/><Equipment player={p}/><strong>{p.health}</strong></div>
-    <div className="player-meta"><span>${p.money}</span><span>{p.kills} / {p.assists} / {p.deaths}</span><span>{(p.primary ?? p.secondary)?.display_name ?? '—'}</span>{p.round_kills > 0 && <b>+{p.round_kills}</b>}</div>
+    <div className="player-meta"><span>${p.money}</span><span>{p.kills} / {p.assists} / {p.deaths}</span><WeaponDisplay weapon={p.primary ?? p.secondary ?? p.active_weapon}/>{p.round_kills > 0 && <b>+{p.round_kills}</b>}</div>
     <div className="health-track"><div style={{ width: `${p.health}%`, background: p.health <= 20 ? '#E5484D' : 'var(--side)' }}/></div></div>
   </div>;
 }
@@ -48,7 +49,7 @@ export function HudModule({ id, state }: { id: ModuleId; state: MatchState }) {
   if (id === 'observed_player') {
     const p = state.observed_player ?? state.players.find(p => p.steamid === state.observed_steamid);
     if (!p) return null;
-    return <div className="observed-panel" style={teamStyle(p.side)}><div className="observed-title"><b>{p.name}</b><UtilityIcons grenades={p.grenades} bomb={p.has_bomb}/><span>${p.money} · MVP {p.mvps}</span></div><div className="observed-detail"><strong>{p.health}<small>HP</small></strong><Equipment player={p}/><span>{p.kills} / {p.assists} / {p.deaths}</span><b>{p.active_weapon?.display_name ?? '—'}<small>{p.active_weapon?.ammo_clip ?? '—'} / {p.active_weapon?.ammo_reserve ?? '—'}</small></b></div></div>;
+    return <div className="observed-panel" style={teamStyle(p.side)}><div className="observed-title"><b>{p.name}</b><UtilityIcons grenades={p.grenades} bomb={p.has_bomb}/><span>${p.money} · MVP {p.mvps}</span></div><div className="observed-detail"><strong>{p.health}<small>HP</small></strong><Equipment player={p}/><span>{p.kills} / {p.assists} / {p.deaths}</span><b><WeaponDisplay weapon={p.active_weapon}/><small>{p.active_weapon?.ammo_clip ?? '—'} / {p.active_weapon?.ammo_reserve ?? '—'}</small></b></div></div>;
   }
   return <div className="team-panel">{playersForPanel(state.players, id === 'team_right').map(p => <PlayerCard key={p.steamid} player={p} mirror={id === 'team_right'}/>)}</div>;
 }

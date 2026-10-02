@@ -1,0 +1,3 @@
+https://github.com/Juknum/counter-strike-icons
+Revision: 85ec43bd170d0622db8eadf160e666c161976375
+Path: cs2/panorama/images/icons/equipment/

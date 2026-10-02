@@ -12,6 +12,9 @@ app.whenReady().then(async () => {
     await win.webContents.executeJavaScript(`Promise.all([...document.images].map(img => img.decode()))`);
     const result = await win.webContents.executeJavaScript(`({ cards: document.querySelectorAll('.player-card').length, radar: document.querySelector('.radar img')?.naturalWidth > 0, icons: document.querySelectorAll('.utility-icons svg').length, text: document.body.innerText.includes('小地图') })`);
     if (result.cards !== 10 || !result.radar || result.icons < 10 || !result.text) throw new Error(JSON.stringify(result));
+    const weapons = await win.webContents.executeJavaScript(`({ cards: [...document.querySelectorAll('.player-card .weapon-icon')].filter(img => img.naturalWidth > 0).length, observed: document.querySelector('.observed-panel .weapon-icon')?.naturalWidth > 0 })`);
+    if (weapons.cards !== 10 || !weapons.observed) throw new Error(`Weapon images: ${JSON.stringify(weapons)}`);
+    await win.webContents.executeJavaScript(`(async () => { const names = await (await fetch('/weapons/manifest.json')).json(); await Promise.all(names.map(async name => { const img = new Image(); img.src = '/weapons/' + name + '.svg'; await img.decode(); if (!img.naturalWidth) throw new Error(name); })); })()`);
     const panels = await win.webContents.executeJavaScript(`({ numbers: [...document.querySelectorAll('.team-panel')].map(panel => [...panel.querySelectorAll('.slot-number')].map(n => n.textContent).join(',')), manual: !!document.querySelector('.sidebar select') || /交换阵营|自动跟随换边/.test(document.querySelector('.sidebar').innerText) })`);
     if (panels.numbers.join('|') !== '1,2,3,4,5|6,7,8,9,0' || panels.manual) throw new Error(`Panel order: ${JSON.stringify(panels)}`);
     const motion = await win.webContents.executeJavaScript(`(async () => {
