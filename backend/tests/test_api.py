@@ -18,7 +18,7 @@ def test_auth_and_tolerant_gsi(client, sample):
 
 def test_layout_and_persistence(client, config):
     default = client.get('/api/layout').json()
-    assert len(default['modules']) == 4
+    assert set(default['modules']) == {'scoreboard', 'team_left', 'team_right', 'observed_player', 'radar'}
     assert client.patch('/api/layout/modules/missing', json={'x': 0}).json()['error']['code'] == 'MODULE_NOT_FOUND'
     for patch in ({'x': 3000}, {'scale': .1}, {'visible': None}, {'id': 'other'}):
         assert client.patch('/api/layout/modules/scoreboard', json=patch).status_code == 422

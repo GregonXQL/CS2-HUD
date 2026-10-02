@@ -2,6 +2,7 @@ import asyncio
 import hmac
 import json
 import logging
+import os
 import time
 from contextlib import asynccontextmanager
 from pathlib import Path
@@ -129,7 +130,7 @@ def create_app(settings: Settings | None = None):
 
     @app.get('/api/health')
     async def health():
-        return {'status': 'ok', 'gsi_online': state.gsi_online, 'last_update_ms': state.last_update_ms, 'ws_clients': bus.counts()}
+        return {'status': 'ok', 'desktop_parent_pid': os.environ.get('DESKTOP_PARENT_PID'), 'gsi_online': state.gsi_online, 'last_update_ms': state.last_update_ms, 'ws_clients': bus.counts()}
 
     @app.get('/api/state')
     async def get_state():

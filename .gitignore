@@ -9,3 +9,6 @@ dist/
 release/
 backend/data/
 *.tsbuildinfo
+backend/build/
+backend/*.spec
+overlay/build/

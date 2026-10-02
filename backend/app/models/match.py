@@ -20,7 +20,14 @@ class RoundInfo(BaseModel):
     win_side: Side | None = None
 
 
+class Position(BaseModel):
+    x: float
+    y: float
+    z: float
+
+
 class BombInfo(BaseModel):
+    position: Position | None = None
     state: Literal['carried', 'dropped', 'planting', 'planted', 'defusing', 'defused', 'exploded', 'none'] = 'none'
     countdown: float | None = None
     player_steamid: str | None = None
@@ -43,6 +50,8 @@ class Weapon(BaseModel):
 
 
 class Player(BaseModel):
+    position: Position | None = None
+    forward: Position | None = None
     steamid: str
     name: str = '—'
     observer_slot: int | None = None

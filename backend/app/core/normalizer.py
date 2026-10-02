@@ -33,6 +33,14 @@ def choice(value, allowed, default=None):
     return value if isinstance(value, str) and value in allowed else default
 
 
+def vector(value):
+    parts = value.split(',') if isinstance(value, str) else value
+    if not isinstance(parts, (list, tuple)) or len(parts) != 3:
+        return None
+    values = [number(v, None) for v in parts]
+    return dict(zip(('x', 'y', 'z'), values)) if all(v is not None for v in values) else None
+
+
 def parse_player(steamid, raw, teams, observed):
     raw = obj(raw)
     state, stats = obj(raw.get('state')), obj(raw.get('match_stats'))
@@ -48,7 +56,7 @@ def parse_player(steamid, raw, teams, observed):
                                   key: integer(w.get(key), None) for key in ('ammo_clip', 'ammo_clip_max', 'ammo_reserve')}))
     primary = next((w for w in weapons if w.type in ('Rifle', 'SniperRifle', 'SMG', 'Shotgun', 'Machine Gun', 'MachineGun')), None)
     health = max(0, min(100, integer(state.get('health'))))
-    return Player(steamid=str(steamid), name=string(raw.get('name')) or '—', observer_slot=integer(raw.get('observer_slot'), None),
+    return Player(position=vector(raw.get('position')), forward=vector(raw.get('forward')), steamid=str(steamid), name=string(raw.get('name')) or '—', observer_slot=integer(raw.get('observer_slot'), None),
                   side=side, team_slot=('A' if side == teams.a_side else 'B') if side else None,
                   health=health, armor=max(0, integer(state.get('armor'))),
                   helmet=boolean(state.get('helmet')), defusekit=boolean(state.get('defusekit')),
@@ -58,7 +66,7 @@ def parse_player(steamid, raw, teams, observed):
                   has_bomb=any(w.name == 'weapon_c4' for w in weapons),
                   active_weapon=next((w for w in weapons if w.active), None), primary=primary,
                   secondary=next((w for w in weapons if w.type == 'Pistol'), None),
-                  grenades=[w.display_name for w in weapons if w.type == 'Grenade'])
+                  grenades=[w.display_name for w in weapons if w.type == 'Grenade' for _ in range(max(1, min(4, w.ammo_reserve or 1)))])
 
 
 def normalize(raw: dict, settings: TeamSettings, now_ms: int, online=True) -> MatchState:
@@ -98,6 +106,6 @@ def normalize(raw: dict, settings: TeamSettings, now_ms: int, online=True) -> Ma
             countdown_phase=string(c.get('phase')), phase_ends_in=number(c.get('phase_ends_in'), None), win_side=choice(r.get('win_team'), ('CT', 'T'))),
         teams=TeamsView(left=views[settings.left_slot], right=views['B' if settings.left_slot == 'A' else 'A']),
         players=players, observed_steamid=observed, observed_player=current,
-        bomb=BombInfo(state=choice(b.get('state') or r.get('bomb'), ('carried', 'dropped', 'planting', 'planted', 'defusing', 'defused', 'exploded'), 'none'),
+        bomb=BombInfo(position=vector(b.get('position')), state=choice(b.get('state') or r.get('bomb'), ('carried', 'dropped', 'planting', 'planted', 'defusing', 'defused', 'exploded'), 'none'),
             countdown=number(b.get('countdown'), None), player_steamid=string(b.get('player'))),
         round_history=sorted(history, key=lambda item: item.round))

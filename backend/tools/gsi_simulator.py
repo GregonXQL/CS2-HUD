@@ -20,6 +20,8 @@ def payload(scenario='live_round', progress=0, token='CHANGE_ME_TOKEN'):
         gun = 'm4a1_silencer' if side == 'CT' else 'ak47'
         players[str(76561198000000000 + i)] = {
             'name': name, 'observer_slot': i, 'team': side,
+            'position': f'{-2200 + (i % 5) * 620 + progress * 120}, {700 - (i // 5) * 2000 - progress * 180}, 0',
+            'forward': '1, 0, 0',
             'state': {'health': health, 'armor': 100, 'helmet': True, 'defusekit': side == 'CT', 'money': 4750 - i * 150 + int(progress * 3) * 100, 'equip_value': 5000, 'round_kills': int(progress * 3) if i == 0 else 0, 'round_killhs': 1 if i == 0 else 0, 'flashed': int(255 * (1-progress)) if i == 5 else 0},
             'match_stats': {'kills': 14-i + (int(progress * 3) if i == 0 else 0), 'assists': 3, 'deaths': 7+i, 'mvps': 2, 'score': 28},
             'weapons': {'weapon_0': {'name': 'weapon_' + gun, 'type': 'Rifle', 'state': 'active', 'ammo_clip': 30-int(progress*20), 'ammo_clip_max': 30, 'ammo_reserve': 90}, 'weapon_1': {'name': 'weapon_flashbang', 'type': 'Grenade', 'state': 'holstered'}, 'weapon_2': {'name': 'weapon_c4' if i == 7 else 'weapon_knife', 'type': 'C4' if i == 7 else 'Knife', 'state': 'holstered'}}}
@@ -36,7 +38,7 @@ def payload(scenario='live_round', progress=0, token='CHANGE_ME_TOKEN'):
         result['round']['win_team'] = 'CT'
     if scenario in ('bomb_plant', 'bomb_explode'):
         bomb_state = ('planted' if progress < .55 else 'defusing' if progress < .85 else 'defused') if scenario == 'bomb_plant' else ('planted' if progress < .9 else 'exploded')
-        result['bomb'] = {'state': bomb_state, 'countdown': str(round(max(0, (40*(1-progress) if bomb_state == 'planted' else 5*(.85-progress)/.3)), 1)), 'player': observed}
+        result['bomb'] = {'state': bomb_state, 'position': '-450, -1900, 0', 'countdown': str(round(max(0, (40*(1-progress) if bomb_state == 'planted' else 5*(.85-progress)/.3)), 1)), 'player': observed}
         result['phase_countdowns'] = {'phase': 'defuse' if bomb_state == 'defusing' else 'bomb', 'phase_ends_in': result['bomb']['countdown']}
         if bomb_state in ('defused', 'exploded'):
             result['round'] = {'phase': 'over', 'bomb': bomb_state, 'win_team': 'CT' if bomb_state == 'defused' else 'T'}

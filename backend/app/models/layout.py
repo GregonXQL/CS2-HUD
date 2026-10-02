@@ -1,8 +1,8 @@
 from typing import Literal
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
-ModuleId = Literal['scoreboard', 'team_left', 'team_right', 'observed_player']
-MODULE_IDS = {'scoreboard', 'team_left', 'team_right', 'observed_player'}
+ModuleId = Literal['scoreboard', 'team_left', 'team_right', 'observed_player', 'radar']
+MODULE_IDS = {'scoreboard', 'team_left', 'team_right', 'observed_player', 'radar'}
 
 
 class ModulePatch(BaseModel):
@@ -39,8 +39,10 @@ class HudLayout(BaseModel):
 
     @model_validator(mode='after')
     def valid_modules(self):
+        if set(self.modules) == MODULE_IDS - {'radar'}:
+            self.modules['radar'] = ModuleLayout(id='radar', x=24, y=110)
         if set(self.modules) != MODULE_IDS or any(k != v.id for k, v in self.modules.items()):
-            raise ValueError('布局必须包含全部四个 P0 模块，且 ID 与键一致')
+            raise ValueError('布局必须包含全部 HUD 模块，且 ID 与键一致')
         return self
 
 

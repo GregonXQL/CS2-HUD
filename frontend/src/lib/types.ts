@@ -1,11 +1,13 @@
 export type Side = 'CT' | 'T';
 export type Slot = 'A' | 'B';
-export type ModuleId = 'scoreboard' | 'team_left' | 'team_right' | 'observed_player';
+export type ModuleId = 'scoreboard' | 'team_left' | 'team_right' | 'observed_player' | 'radar';
 export interface ModuleLayout { id: ModuleId; visible: boolean; x: number; y: number; scale: number; z: number }
 export interface HudLayout { version: 1; hud_visible: boolean; modules: Record<ModuleId, ModuleLayout>; updated_at_ms: number }
 export interface TeamSettings { a_name: string | null; b_name: string | null; a_short: string | null; b_short: string | null; a_side: Side; left_slot: Slot; auto_swap: boolean; roster_counts?: Record<Slot, number> }
 export interface Weapon { name: string; display_name: string; type: string | null; active: boolean; ammo_clip: number | null; ammo_clip_max: number | null; ammo_reserve: number | null }
+export interface Position { x: number; y: number; z: number }
 export interface Player {
+  position?: Position | null; forward?: Position | null;
   steamid: string; name: string; observer_slot: number | null; side: Side | null; team_slot: Slot | null;
   health: number; armor: number; helmet: boolean; defusekit: boolean; money: number; equip_value: number;
   round_kills: number; round_killhs: number; flashed: number; burning: number;
@@ -19,6 +21,6 @@ export interface MatchState {
   map: { name: string | null; display_name: string | null; mode: string | null; phase: 'warmup' | 'live' | 'intermission' | 'gameover' | 'unknown'; current_round: number };
   round: { phase: 'freezetime' | 'live' | 'over' | 'unknown'; countdown_phase: string | null; phase_ends_in: number | null; win_side: Side | null };
   teams: { left: TeamView; right: TeamView }; players: Player[]; observed_steamid: string | null; observed_player: Player | null;
-  bomb: { state: 'carried' | 'dropped' | 'planting' | 'planted' | 'defusing' | 'defused' | 'exploded' | 'none'; countdown: number | null; player_steamid: string | null };
+  bomb: { position?: Position | null; state: 'carried' | 'dropped' | 'planting' | 'planted' | 'defusing' | 'defused' | 'exploded' | 'none'; countdown: number | null; player_steamid: string | null };
   round_history: { round: number; winner_side: Side; reason: 'elimination' | 'bomb' | 'defuse' | 'time' | 'unknown' }[];
 }

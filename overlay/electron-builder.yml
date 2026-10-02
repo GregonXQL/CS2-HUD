@@ -6,6 +6,15 @@ files:
   - dist/**/*
   - assets/**/*
   - package.json
+extraResources:
+  - from: ../backend/dist/CS2BroadcastBackend
+    to: backend
+  - from: ../frontend/dist
+    to: frontend
+  - from: build/backend.env
+    to: backend.env
+  - from: ../cfg
+    to: cfg
 win:
   target:
     - target: portable
