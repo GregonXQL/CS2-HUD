@@ -5,17 +5,36 @@ const path = require('node:path');
 app.setPath('userData', path.resolve(__dirname, '../build/visual-profile'));
 app.whenReady().then(async () => {
   try {
-    const win = new BrowserWindow({ width: 1600, height: 1100, show: false, backgroundColor: '#18202b', webPreferences: { sandbox: true, contextIsolation: true, backgroundThrottling: false } });
+    const win = new BrowserWindow({ width: 1600, height: 1100, show: false, backgroundColor: '#18202b', webPreferences: { sandbox: true, contextIsolation: true, backgroundThrottling: false, offscreen: true } });
+    win.webContents.setFrameRate(60);
     await win.loadURL('http://127.0.0.1:18080/control');
     await new Promise(r => setTimeout(r, 2000));
     await win.webContents.executeJavaScript(`Promise.all([...document.images].map(img => img.decode()))`);
     const result = await win.webContents.executeJavaScript(`({ cards: document.querySelectorAll('.player-card').length, radar: document.querySelector('.radar img')?.naturalWidth > 0, icons: document.querySelectorAll('.utility-icons svg').length, text: document.body.innerText.includes('小地图') })`);
     if (result.cards !== 10 || !result.radar || result.icons < 10 || !result.text) throw new Error(JSON.stringify(result));
+    const motion = await win.webContents.executeJavaScript(`(async () => {
+      const raw = await (await fetch('/api/debug/raw')).json();
+      raw.auth = { token: 'desktop-smoke' };
+      const player = Object.values(raw.allplayers)[0];
+      const pos = player.position.split(',').map(Number); pos[0] += 1;
+      player.position = pos.join(',');
+      // First update after idling intentionally snaps; the next update must interpolate.
+      await fetch('/api/gsi', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(raw) });
+      await new Promise(resolve => setTimeout(resolve, 100));
+      pos[0] += 120; player.position = pos.join(',');
+      const marker = document.querySelector('.radar svg > g');
+      const positions = new Set([marker.getAttribute('transform')]);
+      await fetch('/api/gsi', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(raw) });
+      const start = performance.now();
+      await new Promise(resolve => { const frame = () => { positions.add(marker.getAttribute('transform')); if (performance.now() - start < 200) requestAnimationFrame(frame); else resolve(); }; requestAnimationFrame(frame); });
+      return positions.size;
+    })()`);
+    if (motion < 3) throw new Error(`Radar did not render intermediate positions: ${motion}`);
     fs.writeFileSync(path.resolve(__dirname, '../build/control-smoke.png'), (await win.webContents.capturePage()).toPNG());
     await win.loadURL('http://127.0.0.1:18080/hud');
     await new Promise(r => setTimeout(r, 1200));
     fs.writeFileSync(path.resolve(__dirname, '../build/hud-smoke.png'), (await win.webContents.capturePage()).toPNG());
     console.log('Render smoke passed:', JSON.stringify(result));
     app.exit(0);
-  } catch (error) { console.error(error); app.exit(1); }
+  } catch (error) { fs.writeFileSync(path.resolve(__dirname, '../build/visual-smoke-error.log'), String(error.stack ?? error)); console.error(error); app.exit(1); }
 });

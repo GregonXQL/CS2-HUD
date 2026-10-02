@@ -7,7 +7,7 @@
 1. 双击 `overlay/release/CS2BroadcastOverlay.exe`，自动启动内置后端、桌面控制台和透明 HUD。无需 Python/Node，无需浏览器。首次解压启动稍慢。
 2. 将 `cfg/` 的三个 cfg 复制到 `Steam/steamapps/common/Counter-Strike Global Offensive/game/csgo/cfg/`，重启 CS2。GSI 配置会自动加载。
 3. CS2 使用**全屏窗口化**或窗口化，进入 GOTV、观察位或 `playdemo`。完整小地图需要观战 GSI 提供所有选手坐标。
-4. 游戏控制台运行 `exec broadcast_hud`，隐藏常规原生 HUD、雷达、准星和头顶队友标记，保留右上角击杀信息。`exec broadcast_hud_restore` 恢复常规默认值（不是个人设置备份）。
+4. 游戏控制台运行 `exec broadcast_hud`，隐藏常规原生 HUD、雷达和头顶队友标记，保留右上角击杀信息和白色静态准星（大小 5，不显示扩散、不跟随后坐力、不随武器改变间距）。准星使用本机配置，不跟随被观察选手。`exec broadcast_hud_restore` 恢复常规 HUD 和观察选手准星；本机准星样式保留白色，需要时加载自己的准星 cfg。
 5. 桌面控制台可调整五个模块的位置、缩放和显隐。托盘菜单可选择显示器、重新打开控制台或退出。
 
 `Ctrl+Shift+H` 切换 HUD，`Ctrl+Shift+R` 重载覆盖层。关闭控制台后 HUD 继续运行，托盘“退出”会结束内置后端。启动桌面版前停止旧独立后端，避免占用 8000 端口。
@@ -16,6 +16,8 @@
 
 - 内置 Mirage、Inferno、Dust2、Ancient、Anubis、Nuke、Overpass、Train、Vertigo、Cache 十张离线底图。
 - 显示存活选手编号、阵营、朝向、观察高亮、C4 携带/落点/安放位置。按 overview 固定坐标换算。
+- GSI 使用 `buffer=0`、`throttle=0.025`，后端默认上限 40Hz；实际频率取决于游戏提供数据的速度。位置和朝向按屏幕帧平滑过渡，断流不预测移动，跨楼层/换回合/大幅跳点直接定位。
+- 升级后需重新复制 `gamestate_integration_cs2broadcast.cfg` 到游戏 cfg 目录并重启 CS2。旧 `.env` 如显式设置 `STATE_MAX_HZ=20`，改为 `40` 后重启程序。
 - Nuke、Train、Vertigo 按观察选手高度切换楼层，另一层选手降低透明度。
 - 未知地图、缺失坐标显示提示，不伪造位置。地图更新后可运行 `backend/.venv/Scripts/python scripts/fetch-radars.py` 刷新成套资源，再重新打包。
 - 每位选手姓名旁显示闪光、烟雾、高爆、燃烧瓶/燃烧弹、诱饵及 C4 图标，双闪按数量显示。保留护甲、头盔和拆弹器。图标为本地 SVG。

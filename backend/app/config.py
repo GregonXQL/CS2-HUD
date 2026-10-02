@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     gsi_offline_seconds: float = Field(15, gt=0)
     data_dir: Path = Path('./data')
     frontend_dist: Path = Path('../frontend/dist')
-    state_max_hz: float = Field(20, gt=0, le=60)
+    state_max_hz: float = Field(40, gt=0, le=60)
     gsi_record: bool = False
     regulation_half_rounds: int = Field(12, gt=0)
     overtime_half_rounds: int = Field(3, gt=0)

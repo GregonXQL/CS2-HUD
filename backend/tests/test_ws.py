@@ -39,7 +39,7 @@ def test_gsi_heartbeat_no_state_and_offline(client, sample):
         assert receive_kind(ws, 'gsi_status')['payload']['online'] is True
 
 
-def test_state_throttle_and_latest(client, sample):
+def test_state_throttle_and_latest(client, sample, config):
     sample['auth']['token'] = 'test-token'
     with client.websocket_connect('/ws') as ws:
         ws.receive_json()
@@ -55,5 +55,5 @@ def test_state_throttle_and_latest(client, sample):
             if message['type'] == 'pong': break
             if message['type'] == 'state': states.append(message)
         assert states[-1]['payload']['map']['current_round'] == 60
-        assert len(states) <= int((time.monotonic() - start) * 20) + 1
-        assert all(b['ts'] - a['ts'] >= 45 for a, b in zip(states, states[1:]))
+        assert len(states) <= int((time.monotonic() - start) * config.state_max_hz) + 1
+        assert all(b['ts'] - a['ts'] >= 1000 / config.state_max_hz - 5 for a, b in zip(states, states[1:]))
